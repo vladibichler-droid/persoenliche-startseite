@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <!-- Grundinformationen für den Browser -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Titel oben im Browser-Tab -->
+  <title>Persönliche Startseite</title>
+
+  <!-- Verbindung zur CSS-Datei -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Hauptbereich der Webseite -->
+  <main class="startseite">
+
+    <!-- Oberer Bereich mit Begrüßung und Uhr -->
+    <header class="kopfbereich">
+      <div>
+        <p class="label">Persönliche Startseite abgeschlossen</p>
+
+        <!-- Diese Überschrift wird von JavaScript angepasst -->
+        <h1 id="begruessung">Hallo, Vladi</h1>
+
+        <!-- Dieser Text wird ebenfalls von JavaScript angepasst -->
+        <p id="tagesText" class="beschreibung">
+          Eine ruhige Startseite mit Uhr, wichtigen Links und einem kleinen Notizbereich.
+        </p>
+      </div>
+
+      <section class="uhr-karte">
+        <p class="uhr-label">Aktuelle Uhrzeit</p>
+        <p id="uhrzeit" class="uhrzeit">--:--:--</p>
+        <p id="datum" class="datum">Datum wird geladen ...</p>
+      </section>
+    </header>
+
+    <!-- Kleine Statistik unter dem Kopfbereich -->
+    <section class="statistik-bereich">
+      <article class="statistik-karte">
+        <span id="statistikLinks" class="statistik-zahl">0</span>
+        <p>Gespeicherte Links</p>
+      </article>
+
+      <article class="statistik-karte">
+        <span id="statistikZeichen" class="statistik-zahl">0</span>
+        <p>Zeichen in der Notiz</p>
+      </article>
+
+      <article class="statistik-karte">
+        <span id="statistikStatus" class="statistik-zahl">OK</span>
+        <p>Startseite bereit</p>
+      </article>
+    </section>
+
+    <!-- Kartenbereich mit Links und Notiz -->
+    <section class="inhalt">
+
+      <!-- Linkbereich -->
+      <section class="karte">
+        <div class="karten-kopf">
+          <h2>Wichtige Links</h2>
+          <span id="linkZaehler">0</span>
+        </div>
+
+        <!-- Formular zum Hinzufügen eigener Links -->
+        <form id="linkFormular" class="link-formular">
+          <input
+            type="text"
+            id="linkNameEingabe"
+            placeholder="Linkname, z. B. GitHub"
+            autocomplete="off"
+          >
+
+          <input
+            type="text"
+            id="linkUrlEingabe"
+            placeholder="Adresse, z. B. github.com"
+            autocomplete="off"
+          >
+
+          <input
+            type="text"
+            id="linkBeschreibungEingabe"
+            placeholder="Kurze Beschreibung"
+            autocomplete="off"
+          >
+
+          <button type="submit" class="haupt-button">
+            Link hinzufügen
+          </button>
+        </form>
+
+        <button id="standardLinksButton" class="sekundaer-button breite-button">
+          Standardlinks wiederherstellen
+        </button>
+
+        <!-- Die Linkkarten werden von JavaScript erstellt -->
+        <div class="link-liste" id="linkListe"></div>
+      </section>
+
+      <!-- Notizbereich -->
+      <section class="karte">
+        <div class="karten-kopf">
+          <h2>Kurze Notiz</h2>
+          <span>Lokal</span>
+        </div>
+
+        <div class="notiz-box">
+          <!-- Dieses Textfeld kann beschrieben und gespeichert werden -->
+          <textarea
+            id="notizEingabe"
+            class="notiz-eingabe"
+            placeholder="Schreibe hier eine kurze Notiz ..."
+          ></textarea>
+
+          <p id="notizZeichenText" class="notiz-info">
+            0 Zeichen
+          </p>
+        </div>
+
+        <div class="button-reihe">
+          <button id="notizSpeichernButton" class="haupt-button">
+            Notiz speichern
+          </button>
+
+          <button id="notizLeerenButton" class="sekundaer-button">
+            Notiz leeren
+          </button>
+        </div>
+
+        <div class="hinweis-box">
+          <strong>Hinweis:</strong>
+          Deine Notiz und deine Links werden nur lokal in diesem Browser gespeichert.
+        </div>
+
+        <button id="testButton" class="test-button">
+          JavaScript testen
+        </button>
+
+        <p id="meldung" class="meldung">
+          JavaScript ist bereit.
+        </p>
+      </section>
+
+    </section>
+
+    <!-- Abschlussbereich -->
+    <footer class="abschluss-box">
+      <p>Version 6 von 6 · Persönliche Startseite fertig · GitHub-ready</p>
+    </footer>
+
+  </main>
+
+  <!-- Verbindung zur JavaScript-Datei -->
+  <script src="script.js"></script>
+</body>
+</html>
