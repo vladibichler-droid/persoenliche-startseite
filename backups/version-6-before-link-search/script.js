@@ -17,8 +17,6 @@ const linkBeschreibungEingabe = document.querySelector("#linkBeschreibungEingabe
 const linkListe = document.querySelector("#linkListe");
 const linkZaehler = document.querySelector("#linkZaehler");
 const standardLinksButton = document.querySelector("#standardLinksButton");
-const linkSucheEingabe = document.querySelector("#linkSucheEingabe");
-const linkSucheInfo = document.querySelector("#linkSucheInfo");
 
 const notizEingabe = document.querySelector("#notizEingabe");
 const notizZeichenText = document.querySelector("#notizZeichenText");
@@ -160,35 +158,9 @@ function linksAnzeigen() {
   linkListe.innerHTML = "";
 
   /*
-    Suchbegriff aus dem Suchfeld lesen.
-    Wenn kein Suchfeld vorhanden ist, wird einfach alles angezeigt.
+    Für jeden Link erstellen wir eine kleine Linkkarte.
   */
-  const suchbegriff = linkSucheEingabe ? linkSucheEingabe.value.trim().toLowerCase() : "";
-
-  /*
-    Links nach Name und Beschreibung filtern.
-  */
-  const gefilterteLinks = links.filter(function (link) {
-    const suchText = `${link.name} ${link.beschreibung}`.toLowerCase();
-
-    return suchbegriff === "" || suchText.includes(suchbegriff);
-  });
-
-  /*
-    Wenn nichts gefunden wurde, zeigen wir eine freundliche Meldung.
-  */
-  if (gefilterteLinks.length === 0) {
-    const leerMeldung = document.createElement("div");
-    leerMeldung.classList.add("link-leer-meldung");
-    leerMeldung.textContent = "Keine passenden Links gefunden.";
-
-    linkListe.appendChild(leerMeldung);
-  }
-
-  /*
-    Für jeden passenden Link erstellen wir eine kleine Linkkarte.
-  */
-  gefilterteLinks.forEach(function (link) {
+  links.forEach(function (link) {
     const linkEintrag = document.createElement("div");
     linkEintrag.classList.add("link-eintrag");
 
@@ -225,20 +197,9 @@ function linksAnzeigen() {
   });
 
   /*
-    Der Zähler zeigt die aktuell sichtbaren Links.
+    Der Zähler zeigt immer die aktuelle Linkanzahl.
   */
-  linkZaehler.textContent = gefilterteLinks.length;
-
-  /*
-    Infotext für die Suche aktualisieren.
-  */
-  if (linkSucheInfo) {
-    if (suchbegriff === "") {
-      linkSucheInfo.textContent = "Alle Links werden angezeigt.";
-    } else {
-      linkSucheInfo.textContent = `${gefilterteLinks.length} von ${links.length} Links gefunden.`;
-    }
-  }
+  linkZaehler.textContent = links.length;
 
   /*
     Auch die Statistik wird danach aktualisiert.
@@ -387,17 +348,6 @@ linkFormular.addEventListener("submit", function (event) {
   linkNameEingabe.focus();
 });
 
-
-/*
-  Live-Suche:
-  Während der Eingabe wird die Linkliste automatisch gefiltert.
-*/
-if (linkSucheEingabe) {
-  linkSucheEingabe.addEventListener("input", function () {
-    linksAnzeigen();
-  });
-}
-
 /*
   Klick auf den Button für Standardlinks.
 */
@@ -516,4 +466,4 @@ setInterval(begruessungAktualisieren, 60000);
 /*
   Kontrollausgabe für die Entwicklerkonsole.
 */
-console.log("Persönliche Startseite Version 7 ist gestartet.");
+console.log("Persönliche Startseite Version 6 ist gestartet.");
