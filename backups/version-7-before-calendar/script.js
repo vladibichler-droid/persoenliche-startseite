@@ -28,20 +28,12 @@ const notizLeerenButton = document.querySelector("#notizLeerenButton");
 const testButton = document.querySelector("#testButton");
 const meldung = document.querySelector("#meldung");
 
-const terminFormular = document.querySelector("#terminFormular");
-const terminTitelEingabe = document.querySelector("#terminTitelEingabe");
-const terminDatumEingabe = document.querySelector("#terminDatumEingabe");
-const terminArtEingabe = document.querySelector("#terminArtEingabe");
-const terminListe = document.querySelector("#terminListe");
-const terminZaehler = document.querySelector("#terminZaehler");
-
 /*
   Namen für den Speicherplatz im Browser.
   localStorage merkt sich Daten lokal im Browser.
 */
 const notizSpeicherName = "persoenlicheStartseiteNotiz";
 const linksSpeicherName = "persoenlicheStartseiteLinks";
-const termineSpeicherName = "persoenlicheStartseiteTermine";
 
 /*
   Standardlinks, falls noch keine eigenen Links gespeichert sind.
@@ -77,7 +69,6 @@ const standardLinks = [
   In diesem Array liegen alle aktuellen Links.
 */
 let links = [];
-let termine = [];
 
 /*
   Diese Funktion aktualisiert Uhrzeit und Datum.
@@ -497,175 +488,6 @@ testButton.addEventListener("click", function () {
   statistikAktualisieren();
 });
 
-
-/*
-  Diese Funktion formatiert ein Datum lesbar.
-*/
-function datumFormatieren(datumText) {
-  const datumObjekt = new Date(datumText + "T00:00:00");
-
-  return datumObjekt.toLocaleDateString("de-DE", {
-    weekday: "short",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric"
-  });
-}
-
-/*
-  Diese Funktion speichert alle Termine im Browser.
-*/
-function termineSpeichern() {
-  localStorage.setItem(termineSpeicherName, JSON.stringify(termine));
-}
-
-/*
-  Diese Funktion lädt Termine aus dem Browser.
-*/
-function termineLaden() {
-  const gespeicherteTermine = localStorage.getItem(termineSpeicherName);
-
-  if (gespeicherteTermine === null) {
-    termine = [];
-    return;
-  }
-
-  termine = JSON.parse(gespeicherteTermine);
-}
-
-/*
-  Diese Funktion zeigt Termine und Geburtstage an.
-*/
-function termineAnzeigen() {
-  if (!terminListe) {
-    return;
-  }
-
-  terminListe.innerHTML = "";
-
-  const sortierteTermine = [...termine].sort(function (a, b) {
-    return a.datum.localeCompare(b.datum);
-  });
-
-  if (sortierteTermine.length === 0) {
-    const leerMeldung = document.createElement("div");
-    leerMeldung.classList.add("termin-leer-meldung");
-    leerMeldung.textContent = "Noch keine Termine oder Geburtstage gespeichert.";
-
-    terminListe.appendChild(leerMeldung);
-  }
-
-  sortierteTermine.forEach(function (termin) {
-    const terminEintrag = document.createElement("article");
-    terminEintrag.classList.add("termin-eintrag");
-
-    const terminInhalt = document.createElement("div");
-
-    const terminTitel = document.createElement("strong");
-    terminTitel.textContent = termin.titel;
-
-    const terminInfo = document.createElement("small");
-
-    const terminBadge = document.createElement("span");
-    terminBadge.classList.add("termin-badge");
-
-    if (termin.art === "Geburtstag") {
-      terminBadge.classList.add("geburtstag");
-      terminBadge.textContent = "🎂 Geburtstag";
-    } else {
-      terminBadge.textContent = "📅 Termin";
-    }
-
-    terminInfo.appendChild(terminBadge);
-    terminInfo.append(datumFormatieren(termin.datum));
-
-    const loeschenButton = document.createElement("button");
-    loeschenButton.classList.add("termin-loeschen-button");
-    loeschenButton.textContent = "Löschen";
-
-    loeschenButton.addEventListener("click", function () {
-      terminLoeschen(termin.id);
-    });
-
-    terminInhalt.appendChild(terminTitel);
-    terminInhalt.appendChild(terminInfo);
-
-    terminEintrag.appendChild(terminInhalt);
-    terminEintrag.appendChild(loeschenButton);
-
-    terminListe.appendChild(terminEintrag);
-  });
-
-  if (terminZaehler) {
-    terminZaehler.textContent = termine.length;
-  }
-}
-
-/*
-  Diese Funktion fügt einen neuen Termin hinzu.
-*/
-function terminHinzufuegen(titel, datum, art) {
-  const neuerTermin = {
-    id: neueIdErstellen(),
-    titel: titel,
-    datum: datum,
-    art: art
-  };
-
-  termine.push(neuerTermin);
-  termineSpeichern();
-  termineAnzeigen();
-
-  meldung.textContent = "Kalendereintrag wurde gespeichert.";
-}
-
-/*
-  Diese Funktion löscht einen Termin.
-*/
-function terminLoeschen(terminId) {
-  const bestaetigung = confirm("Möchtest du diesen Kalendereintrag wirklich löschen?");
-
-  if (bestaetigung === false) {
-    return;
-  }
-
-  termine = termine.filter(function (termin) {
-    return termin.id !== terminId;
-  });
-
-  termineSpeichern();
-  termineAnzeigen();
-
-  meldung.textContent = "Kalendereintrag wurde gelöscht.";
-}
-
-/*
-  Formular für neue Kalendertermine.
-*/
-if (terminFormular) {
-  terminFormular.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const titel = terminTitelEingabe.value.trim();
-    const datum = terminDatumEingabe.value;
-    const art = terminArtEingabe.value;
-
-    if (titel === "" || datum === "") {
-      meldung.textContent = "Bitte gib einen Titel und ein Datum ein.";
-      return;
-    }
-
-    terminHinzufuegen(titel, datum, art);
-
-    terminTitelEingabe.value = "";
-    terminDatumEingabe.value = "";
-    terminArtEingabe.value = "Termin";
-
-    terminTitelEingabe.focus();
-  });
-}
-
-
 /*
   Uhr und Begrüßung direkt beim Start anzeigen.
 */
@@ -677,9 +499,7 @@ begruessungAktualisieren();
 */
 linksLaden();
 notizLaden();
-termineLaden();
 linksAnzeigen();
-termineAnzeigen();
 
 /*
   Uhr jede Sekunde aktualisieren.
@@ -696,4 +516,4 @@ setInterval(begruessungAktualisieren, 60000);
 /*
   Kontrollausgabe für die Entwicklerkonsole.
 */
-console.log("Persönliche Startseite Version 8 ist gestartet.");
+console.log("Persönliche Startseite Version 7 ist gestartet.");
